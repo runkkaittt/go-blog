@@ -76,10 +76,62 @@ func getUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func updateUser(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, World!"))
+func updateUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		strId := vars["id"]
+
+		id, err := strconv.Atoi(strId)
+		if err != nil {
+			fmt.Fprintln(w, err)
+			return
+		}
+
+		for i := range db.Users {
+			if db.Users[i].ID == id {
+				var user User
+
+				if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
+					fmt.Println(err)
+				}
+
+				db.Users[i] = user
+				log.Printf("User updated successfully: %v\n", user)
+
+				w.WriteHeader(http.StatusOK)
+				fmt.Fprintf(w, "User updated successfully")
+				return
+			}
+		}
+
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintln(w, "User not found")
+	}
 }
 
-func deleteUser(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Hello, World!"))
+func deleteUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		vars := mux.Vars(r)
+		strId := vars["id"]
+
+		id, err := strconv.Atoi(strId)
+		if err != nil {
+			fmt.Fprintln(w, err)
+			return
+		}
+
+		for i := range db.Users {
+			if db.Users[i].ID == id {
+				db.Users = append(db.Users[:i], db.Users[i+1:]...)
+				log.Printf("User deleted successfully: %v\n", id)
+
+				w.WriteHeader(http.StatusOK)
+				fmt.Fprintf(w, "User deleted successfully")
+				return
+			}
+		}
+
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintln(w, "User not found")
+	}
 }
