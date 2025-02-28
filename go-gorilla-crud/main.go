@@ -1,3 +1,4 @@
+// Basic CRUD operations using Gorilla mux
 package main
 
 import (
@@ -10,6 +11,7 @@ import (
 	"github.com/gorilla/mux"
 )
 
+// imitation of database
 type DB struct {
 	Users []User
 }
