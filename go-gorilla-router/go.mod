@@ -1,4 +1,4 @@
-module go-gorilla-crud
+module go-gorilla-router
 
 go 1.22.2
 

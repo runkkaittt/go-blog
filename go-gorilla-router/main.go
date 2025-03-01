@@ -36,7 +36,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
-func createUser(counter int, db *DB) func(w http.ResponseWriter, r *http.Request) {
+func createUser(counter int, db *DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var user User
 
@@ -55,7 +55,7 @@ func createUser(counter int, db *DB) func(w http.ResponseWriter, r *http.Request
 	}
 }
 
-func getUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
+func getUser(db *DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		strId := vars["id"]
@@ -78,7 +78,7 @@ func getUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func updateUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
+func updateUser(db *DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		strId := vars["id"]
@@ -111,7 +111,7 @@ func updateUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func deleteUser(db *DB) func(w http.ResponseWriter, r *http.Request) {
+func deleteUser(db *DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
 		strId := vars["id"]

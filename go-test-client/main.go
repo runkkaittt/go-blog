@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"strconv"
 )
 
 func main() {
 	for range 3 {
 		newUser()
 	}
+	// updateUser()
 }
 
 func newUser() {
@@ -33,21 +33,29 @@ func newUser() {
 	fmt.Println(string(body))
 }
 
-func updateUser() {
-	data := []byte(`{"name": "Eric"}`)
-	r := bytes.NewReader(data)
+// func updateUser() {
+// 	data := []byte(`{"name": "Dima"}`)
+// 	body := bytes.NewReader(data)
 
-	resp, err := http.Post("http://localhost:8080/user/"+strconv.Itoa(0), "application/json", r)
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
-	defer resp.Body.Close()
+// 	req, err := http.NewRequest("PUT", "http://localhost:8080/user", body)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
 
-	fmt.Println("Запрос отправлен")
+// 	req.Header.Add("Content-Type", "application/json")
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println("Error:", err)
-	}
-	fmt.Println(string(body))
-}
+// 	client := &http.Client{}
+// 	resp, err := client.Do(req)
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// 	defer resp.Body.Close()
+
+// 	fmt.Println("Запрос отправлен")
+
+// 	d, err := io.ReadAll(resp.Body)
+// 	if err != nil {
+// 		fmt.Println("Error:", err)
+// 	}
+// 	fmt.Println(string(d))
+// }
